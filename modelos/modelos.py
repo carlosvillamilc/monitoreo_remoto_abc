@@ -6,12 +6,33 @@ import enum
 
 db = SQLAlchemy()
 
+@enum.unique            
+class TipoUsuario(int, enum.Enum):
+    CLIENTE: int = 1                                      
+    OPERADOR: int = 2
+    ADMINISTRADOR: int = 3
+
+
+class Usuario(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    usuario = db.Column(db.String(50))
+    contrasena = db.Column(db.String(50))
+    tipo_usuario = db.Column(db.Enum(TipoUsuario))
+    
 
 class Central(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     direccion = db.Column(db.String(128))
     sede = db.Column(db.String(128))
     operario = db.Column(db.String(128))
+
+
+class UsuarioSchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = Usuario
+        include_relationships = True
+        include_fk = True
+        load_instance = True
 
 
 class CentralSchema(SQLAlchemyAutoSchema):

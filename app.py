@@ -4,7 +4,7 @@ from flask_jwt_extended import JWTManager
 from flask_restful import Api
 
 from modelos import db
-from vistas import VistaApuestas
+from vistas import VistaLogIn, VistaSignIn, VistaValidateToken
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///central.db'
@@ -21,8 +21,8 @@ db.create_all()
 cors = CORS(app)
 
 api = Api(app)
-
-api.add_resource(VistaApuestas, '/central')
-
+api.add_resource(VistaSignIn, '/signin')
+api.add_resource(VistaLogIn, '/login')
+api.add_resource(VistaValidateToken,'/checktoken')
 
 jwt = JWTManager(app)
