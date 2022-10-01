@@ -30,7 +30,7 @@ class VistaSignIn(Resource):
         payload={"usuario":nuevo_usuario.usuario,"contrasena":nuevo_usuario.contrasena,"exp":dt}
         token_de_acceso = jwt.encode(payload, key,algorithm="HS256")
         #token_de_acceso = create_access_token(identity=nuevo_usuario.id)
-        return {"mensaje": "usuario creado exitosamente", "token": token_de_acceso, "expiracion_token":dt,"id": nuevo_usuario.id}        
+        return {"mensaje": "usuario creado exitosamente", "token": token_de_acceso, "expiracion_token":dt.strftime("%d/%m/%Y, %H:%M:%S"),"id": nuevo_usuario.id}        
 
     def put(self, id_usuario):
         usuario = Usuario.query.get_or_404(id_usuario)
