@@ -10,11 +10,10 @@ import json
 import time
 from datetime import datetime, timedelta, timezone
 
-from modelos import db, Central, Usuario, TokenValidation, UsuarioSchema, CentralSchema, TokenValidationSchema
+from modelos import db, Central, Usuario, UsuarioSchema, CentralSchema
 
 central_schema = CentralSchema()
 usuario_schema = UsuarioSchema()
-token_validation_schema = TokenValidationSchema()
 
 key='super-secret'
 expires_token=60
