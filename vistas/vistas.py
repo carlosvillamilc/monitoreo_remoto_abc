@@ -27,7 +27,7 @@ class VistaCentral(Resource):
 
         api_url = "http://127.0.0.1:5000/checktoken"
 
-        payload = json.dumps({"contrasena": "admin"})
+        payload = json.dumps({"contrasena": contrasena})
 
         headers = {'Authorization': 'Bearer {}'.format(
             parameter_token), 'Content-Type': 'application/json'}
