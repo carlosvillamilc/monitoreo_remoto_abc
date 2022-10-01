@@ -1,6 +1,12 @@
 from ast import Break
+from cgitb import text
+from email import message
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+import smtplib
 from unittest import result
 from flask import request
+from flask_mail import Message
 from flask_jwt_extended import jwt_required, create_access_token, decode_token, get_jwt
 from flask_restful import Resource
 from sqlalchemy import false, null
@@ -89,3 +95,23 @@ class VistaValidateToken(Resource):
             return {"Error": "Error confirmación contraseña"}, 405
                 
         return {"Respuesta": "Credenciales y token validadas"},200
+
+
+class VistaEnviarCorreo(Resource):
+
+    mail = None
+
+    def post(self):
+
+        try: 
+            sender = "pruebaui221@gmail.com"
+            recipient = "brayanher1322@gmail.com"
+            message = "hola"
+            subject = "Prueba"
+            
+            # inputing the message in the correct order
+            msg = Message(subject,sender=sender,recipients =[recipient] )
+            msg.body = message
+            self.mail.send(msg)
+        except Exception as e:
+            return {"Error": str(e)}, 405
