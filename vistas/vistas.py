@@ -70,7 +70,7 @@ class VistaLogIn(Resource):
 
 
 class VistaValidateToken(Resource):
-    
+    mail = None
     def post(self):
         try:                
             token = request.headers["Authorization"]
@@ -79,7 +79,6 @@ class VistaValidateToken(Resource):
             
         token = token.replace('Bearer ','')
         
-        #token=request.json["token"]
         contrasena_body=request.json["contrasena"]
         try:
         
@@ -88,15 +87,21 @@ class VistaValidateToken(Resource):
             # Signature has expired            
             return {"Error": "Token Expirado"}, 405
         
-        #usuario = decoded_data["usuario"]
         contrasena = decoded_data["contrasena"]
+        usuario = decoded_data["usuario"]
         
         if contrasena != contrasena_body:
             nuevo_token_revocado = TokenRevocado(tokenr = token)
             db.session.add(nuevo_token_revocado)
             db.session.commit()
+            
+            correoUsuario = Usuario.query.filter(Usuario.usuario == usuario).first().email
+            db.session.commit()
+            print(correoUsuario)
+            if correoUsuario is not None:
+                self.EnviarCorreo(correoUsuario)
+            
             return {"Error": "Error confirmación contraseña"}, 405
-        
         
         tokenBd = TokenRevocado.query.filter(TokenRevocado.tokenr == token).first()
         db.session.commit()
@@ -104,21 +109,14 @@ class VistaValidateToken(Resource):
             return {"Respuesta": "Credenciales y token validadas"},200
         else:
             return {"Error": "Token Revocado"}, 405
-
-
-class VistaEnviarCorreo(Resource):
-
-    mail = None
-
-    def post(self):
-
+        
+    def EnviarCorreo(self,recipient):
+        
         try: 
             sender = "pruebaui221@gmail.com"
-            recipient = "brayanher1322@gmail.com"
-            message = "hola"
-            subject = "Prueba"
+            message = "Se ha detectado una posible intrusión en su cuenta."
+            subject = "Alerta Intento de Intrusión"
             
-            # inputing the message in the correct order
             msg = Message(subject,sender=sender,recipients =[recipient] )
             msg.body = message
             self.mail.send(msg)
