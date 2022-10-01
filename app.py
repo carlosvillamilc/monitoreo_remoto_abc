@@ -4,7 +4,7 @@ from flask_jwt_extended import JWTManager
 from flask_restful import Api
 
 from modelos import db
-from vistas import VistaApuestas
+from vistas import VistaCentral
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///central.db'
@@ -22,7 +22,7 @@ cors = CORS(app)
 
 api = Api(app)
 
-api.add_resource(VistaApuestas, '/central')
+api.add_resource(VistaCentral, '/central')
 
 
 jwt = JWTManager(app)
