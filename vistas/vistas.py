@@ -23,7 +23,8 @@ class VistaSignIn(Resource):
     def post(self):
         nuevo_usuario = Usuario(usuario=request.json["usuario"],
                                 contrasena=request.json["contrasena"],
-                                tipo_usuario=request.json["tipo_usuario"],)
+                                tipo_usuario=request.json["tipo_usuario"],
+                                email=request.json["email"])
         db.session.add(nuevo_usuario)
         db.session.commit()
         dt = datetime.now(tz=timezone.utc) + timedelta(seconds=expires_token)

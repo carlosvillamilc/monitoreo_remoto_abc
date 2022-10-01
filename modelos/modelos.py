@@ -18,6 +18,7 @@ class Usuario(db.Model):
     usuario = db.Column(db.String(50))
     contrasena = db.Column(db.String(50))
     tipo_usuario = db.Column(db.Enum(TipoUsuario))
+    email = db.Column(db.String(50))
     
 
 class Central(db.Model):
