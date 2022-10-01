@@ -26,6 +26,11 @@ class Central(db.Model):
     direccion = db.Column(db.String(128))
     sede = db.Column(db.String(128))
     operario = db.Column(db.String(128))
+    
+    
+class TokenRevocado(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    tokenr = db.Column(db.String())
 
 
 class UsuarioSchema(SQLAlchemyAutoSchema):

@@ -16,13 +16,13 @@ import json
 import time
 from datetime import datetime, timedelta, timezone
 
-from modelos import db, Central, Usuario, UsuarioSchema, CentralSchema
+from modelos import db, Central, Usuario, UsuarioSchema, CentralSchema, TokenRevocado
 
 central_schema = CentralSchema()
 usuario_schema = UsuarioSchema()
 
 key='super-secret'
-expires_token=60
+expires_token=6000
 
 class VistaSignIn(Resource):
 
@@ -92,9 +92,18 @@ class VistaValidateToken(Resource):
         contrasena = decoded_data["contrasena"]
         
         if contrasena != contrasena_body:
+            nuevo_token_revocado = TokenRevocado(tokenr = token)
+            db.session.add(nuevo_token_revocado)
+            db.session.commit()
             return {"Error": "Error confirmación contraseña"}, 405
-                
-        return {"Respuesta": "Credenciales y token validadas"},200
+        
+        
+        tokenBd = TokenRevocado.query.filter(TokenRevocado.tokenr == token).first()
+        db.session.commit()
+        if tokenBd is None:
+            return {"Respuesta": "Credenciales y token validadas"},200
+        else:
+            return {"Error": "Token Revocado"}, 405
 
 
 class VistaEnviarCorreo(Resource):
