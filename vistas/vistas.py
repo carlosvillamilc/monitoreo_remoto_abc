@@ -24,8 +24,9 @@ class VistaCentral(Resource):
         parameter_token = token.replace("Bearer", "").strip()
         #print("Contraseña: " + contrasena)
         #print("Token: " + parameter_token)
-
-        api_url = "http://127.0.0.1:5000/checktoken"
+        
+        api_url = "https://monitoreo-remoto-abc-autentica.herokuapp.com/checktoken"
+        #api_url = "http://127.0.0.1:5000/checktoken"
 
         payload = json.dumps({"contrasena": contrasena})
 
@@ -47,3 +48,11 @@ class VistaCentral(Resource):
             return central_schema.dump(nueva_central)
         else:
             return {"Error": "Transacción Invalidada"}, 405
+    
+
+class VistaDireccion(Resource):
+    
+    def get(self,id_direccion):
+        return central_schema.dump(Central.query.get_or_404(id_direccion))
+        
+
